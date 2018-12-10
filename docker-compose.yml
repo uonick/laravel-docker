@@ -1,0 +1,58 @@
+version: '3.7'
+
+services:
+
+  common:
+    image: ubuntu:18.04
+    container_name: common
+
+  php:
+    container_name: php
+    restart: on-failure
+    build:
+      context: ./docker/services/php
+      args:
+        - PHP_VERSION=${PHP_VERSION}
+    volumes:
+      - ./docker/services/php/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+      - ./${WWW_PATH}:${CODE_PATH}
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: on-failure
+    volumes:
+      - ./${WWW_PATH}:${CODE_PATH}
+      - ./docker/services/nginx/conf.d:/etc/nginx/conf.d
+      - ${NGINX_LOG_PATH}:/var/log/nginx
+    ports:
+      - "${NGINX_HTTP_PORT}:${NGINX_HTTP_PORT}"
+
+  mysql:
+    container_name: mysql
+    restart: on-failure
+    build:
+      context: ./docker/services/mysql
+      args:
+        - MYSQL_VERSION=${MYSQL_VERSION}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - MYSQL_PORT=${MYSQL_PORT}
+        - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
+    ports:
+      - "${MYSQL_PORT}:${MYSQL_PORT}"
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ${MYSQL_DATABASE_PATH}:/var/lib/mysql
+      - ${MYSQL_LOG_PATH}:/var/log/mysql/
+
+  redis:
+    container_name: redis
+    build: ./docker/services/redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"

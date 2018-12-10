@@ -1,0 +1,8 @@
+# macOS files
+.DS_Store
+*.log
+
+# Database
+docker/database/*
+!docker/database/.gitkeep
+.env
