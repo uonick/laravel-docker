@@ -11,3 +11,5 @@
 # Commands
 (3rd arg → container name (php, nginx etc...))
 * `docker-compose exec php php /code/artisan`
+
+![screenshot](www/public/screenshot.png)
