@@ -12,4 +12,9 @@
 (3rd arg → container name (php, nginx etc...))
 * `docker-compose exec php php /code/artisan`
 
+# Access
+* MySQL host: `mysql`
+* MySQL user: `laravel`
+* MySQL password: `laravel`
+
 ![screenshot](www/public/screenshot.png)

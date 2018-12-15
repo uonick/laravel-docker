@@ -1,13 +1,9 @@
 version: '3.7'
 
 services:
-
-  common:
+  ubuntu:
     image: ubuntu:18.04
-    container_name: common
-
   php:
-    container_name: php
     restart: on-failure
     build:
       context: ./docker/services/php
@@ -16,10 +12,8 @@ services:
     volumes:
       - ./docker/services/php/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
       - ./${WWW_PATH}:${CODE_PATH}
-
   nginx:
     image: nginx:latest
-    container_name: nginx
     restart: on-failure
     volumes:
       - ./${WWW_PATH}:${CODE_PATH}
@@ -27,9 +21,7 @@ services:
       - ${NGINX_LOG_PATH}:/var/log/nginx
     ports:
       - "${NGINX_HTTP_PORT}:${NGINX_HTTP_PORT}"
-
   mysql:
-    container_name: mysql
     restart: on-failure
     build:
       context: ./docker/services/mysql
@@ -48,9 +40,8 @@ services:
     volumes:
       - ${MYSQL_DATABASE_PATH}:/var/lib/mysql
       - ${MYSQL_LOG_PATH}:/var/log/mysql/
-
+      - ./docker/services/mysql/config-overrides.cnf:/etc/mysql/conf.d/my.cnf
   redis:
-    container_name: redis
     build: ./docker/services/redis
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
