@@ -14,6 +14,7 @@ RUN apt-get install libxml2-dev
 
 # laravel requirements
 RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 RUN docker-php-ext-install json
 RUN docker-php-ext-install iconv
 RUN docker-php-ext-install mbstring
