@@ -10,7 +10,7 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION}
     volumes:
-      - ./docker/services/php/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+      - ./docker/services/php/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
       - ./${WWW_PATH}:${CODE_PATH}
   nginx:
     image: nginx:latest

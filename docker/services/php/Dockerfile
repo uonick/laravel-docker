@@ -7,12 +7,12 @@ RUN apt-get update && apt-get install -y \
 RUN pecl install imagick && docker-php-ext-enable imagick
 
 # zip
-RUN apt-get update && apt-get install -y zlib1g-dev
+RUN apt-get install -y zlib1g-dev
 
 # xml
 RUN apt-get install libxml2-dev
 
-# laravel requirements
+# extensions
 RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 RUN docker-php-ext-install json
