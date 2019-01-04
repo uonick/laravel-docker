@@ -3,6 +3,7 @@
 # Intro
 This repo contains the source of PHP development environment for Docker.
 
+* Ubuntu 18.04
 * MySQL 8.x
 * PHP 7.3.x
 * Redis 5.0.x
