@@ -3,6 +3,7 @@ version: '3.7'
 services:
   ubuntu:
     image: ubuntu:18.04
+
   php:
     restart: "no"
     build:
@@ -12,6 +13,7 @@ services:
     volumes:
       - ./docker/services/php/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-overrides.ini
       - ./${WWW_PATH}:${CODE_PATH}
+
   nginx:
     image: nginx:latest
     restart: "no"
@@ -21,29 +23,33 @@ services:
       - ${NGINX_LOG_PATH}:/var/log/nginx
     ports:
       - "${NGINX_HTTP_PORT}:${NGINX_HTTP_PORT}"
+
   mysql:
     restart: "no"
     build:
       context: ./docker/services/mysql
       args:
         - MYSQL_VERSION=${MYSQL_VERSION}
-        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
         - MYSQL_PORT=${MYSQL_PORT}
-        - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
     ports:
       - "${MYSQL_PORT}:${MYSQL_PORT}"
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - ${MYSQL_DATABASE_PATH}:/var/lib/mysql
       - ${MYSQL_LOG_PATH}:/var/log/mysql/
       - ./docker/services/mysql/config-overrides.cnf:/etc/mysql/conf.d/my.cnf
+
   redis:
     build: ./docker/services/redis
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
       - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - ./docker/services/redis:/etc/redis/redis.conf
+    sysctls:
+      net.core.somaxconn: '511'
