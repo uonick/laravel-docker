@@ -30,9 +30,9 @@ services:
       context: ./docker/services/mysql
       args:
         - MYSQL_VERSION=${MYSQL_VERSION}
-        - MYSQL_PORT=${MYSQL_PORT}
+        - DB_PORT=${DB_PORT}
     ports:
-      - "${MYSQL_PORT}:${MYSQL_PORT}"
+      - "${DB_PORT}:${DB_PORT}"
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}

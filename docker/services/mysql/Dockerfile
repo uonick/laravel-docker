@@ -1,4 +1,4 @@
-ARG MYSQL_PORT
+ARG DB_PORT
 ARG MYSQL_VERSION
 
 FROM mysql:${MYSQL_VERSION}
@@ -6,4 +6,4 @@ RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime && echo UTC > /etc/timezone &
 
 CMD ["mysqld"]
 
-EXPOSE ${MYSQL_PORT}
+EXPOSE ${DB_PORT}
